@@ -1,0 +1,79 @@
+ //signup form validation
+    handleValidation = () => {
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+
+        //Password
+        if (!fields["password"]) {
+            formIsValid = false;
+            errors["password"] = "Password is required.";
+        }
+
+        if (
+            typeof fields["password"] !== "undefined" &&
+            fields["password"] !== ""
+        ) {
+            if (
+                !fields["password"].match(
+                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+                )
+            ) {
+                formIsValid = false;
+                errors["password"] =
+                    "Password should have one uppercase letter one number and one special character,minimum 8 characters";
+            }
+        }
+
+        //last_name
+        if (!fields["lastName"]) {
+            formIsValid = false;
+            errors["lastName"] = "required*";
+        }
+
+        //first name
+        if (!fields["firstName"]) {
+            formIsValid = false;
+            errors["firstName"] = "required*";
+        }
+
+        //Confirm Password
+        if (
+            typeof fields["conPassword"] !== "undefined" &&
+            fields["conPassword"] !== ""
+        ) {
+            if (fields["conPassword"] !== fields["password"]) {
+                formIsValid = false;
+                errors["conPassword"] = "Passwords don't match";
+            }
+        } else {
+            formIsValid = false;
+            errors["conPassword"] = "Confirm Password is Required";
+        }
+
+        //Email
+        if (!fields["email"]) {
+            formIsValid = false;
+            errors["email"] = "Email is required";
+        }
+
+        if (typeof fields["email"] !== "undefined" && fields["email"] !== "") {
+            let lastAtPos = fields["email"].lastIndexOf("@");
+            let lastDotPos = fields["email"].lastIndexOf(".");
+
+            if (
+                !(
+                    lastAtPos < lastDotPos &&
+                    lastAtPos > 0 &&
+                    fields["email"].indexOf("@@") === -1 &&
+                    lastDotPos > 2 &&
+                    fields["email"].length - lastDotPos > 2
+                )
+            ) {
+                formIsValid = false;
+                errors["email"] = "Email is not valid";
+            }
+        }
+
+        this.setState({ errors: errors });
+        return formIsValid;
